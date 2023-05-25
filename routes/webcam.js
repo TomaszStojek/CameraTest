@@ -20,9 +20,10 @@ router.get('/', async (req, res) => {
 
 async function getObjectsFromImage(imageFile) {
     try {
+        console.log("inside getObjectsFromImage function before google cloud vision");
         // Imports the Google Cloud client library
         const vision = require('@google-cloud/vision');
-
+        console.log("inside getObjectsFromImage function");
         // Creates a client
         const client = new vision.ImageAnnotatorClient();
 
@@ -30,7 +31,7 @@ async function getObjectsFromImage(imageFile) {
         const [result] = await client.objectLocalization(imageFile.buffer);
 
         const objects = result.localizedObjectAnnotations;
-
+        console.log('Objects:', objects);
         return objects;
     } catch (error) {
         console.error('Error in getLabelsFromImage:', error);
@@ -48,7 +49,7 @@ router.post('/getLabels', upload.single('imageFile'), async (req, res) => {
         }
 
         const imageFile = req.file;
-
+        console.log(imageFile);
         // Call the function to get labels from the image using Google Cloud Vision API
         const objects = await getObjectsFromImage(imageFile);
 
